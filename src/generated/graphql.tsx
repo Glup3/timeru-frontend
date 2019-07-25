@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+import * as ReactApollo from 'react-apollo';
+import * as ReactApolloHooks from 'react-apollo-hooks';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -310,3 +312,28 @@ export type UserPermissionInput = {
   permissionId?: Maybe<Scalars['ID']>;
   permissionTitle?: Maybe<Scalars['String']>;
 };
+export type LoginMutationVariables = {
+  credentials: CredentialsInput;
+};
+
+export type LoginMutation = { __typename?: 'Mutation' } & {
+  login: Maybe<{ __typename?: 'LoginMutationResponse' } & Pick<LoginMutationResponse, 'code' | 'success' | 'message'>>;
+};
+
+export const LoginDocument = gql`
+  mutation Login($credentials: CredentialsInput!) {
+    login(credentials: $credentials) {
+      code
+      success
+      message
+    }
+  }
+`;
+export type LoginMutationFn = ReactApollo.MutationFn<LoginMutation, LoginMutationVariables>;
+
+export function useLoginMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+}
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;

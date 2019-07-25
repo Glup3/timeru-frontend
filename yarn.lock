@@ -982,7 +982,7 @@
     "@graphql-codegen/visitor-plugin-common" "1.4.0"
     tslib "1.10.0"
 
-"@graphql-codegen/typescript-react-apollo@1.4.0":
+"@graphql-codegen/typescript-react-apollo@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-1.4.0.tgz#dd186ec7f6a119826e997519e510d0df6a0e7da2"
   integrity sha512-FZUfAl9LhFPdpxXPr4ebHLcII8h5OoksducLsIWzSbPRBdsgab7m5Mbg0PnoP8AEdrWKzMQgDHg0OD8UhpWt+A==
@@ -1382,6 +1382,11 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/graphql@^14.2.3":
+  version "14.2.3"
+  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.2.3.tgz#cfc6420a67eb20420786f90112357921974593b9"
+  integrity sha512-UoCovaxbJIxagCvVfalfK7YaNhmxj3BQFRQ2RHQKLiu+9wNXhJnlbspsLHt/YQM99IaLUUFJNzCwzc6W0ypMeQ==
 
 "@types/is-glob@4.0.1":
   version "4.0.1"

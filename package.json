@@ -8,6 +8,7 @@
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.5",
     "apollo-boost": "^0.4.3",
+    "dotenv": "^8.0.0",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "react": "^16.8.6",

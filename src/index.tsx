@@ -6,6 +6,7 @@ import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { AUTH_TOKEN } from './constants';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
+import './css/tailwind.css';
 
 require('dotenv').config();
 

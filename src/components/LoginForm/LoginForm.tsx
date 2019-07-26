@@ -30,7 +30,11 @@ const LoginForm: React.FC = () => {
 
   if (!data || !data.login) {
     return (
-      <button onClick={() => login()} disabled={loading}>
+      <button
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+        onClick={() => login()}
+        disabled={loading}
+      >
         Login
       </button>
     );

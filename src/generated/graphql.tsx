@@ -74,6 +74,7 @@ export type LoginMutationResponse = MutationResponse & {
   code: Scalars['String'];
   success: Scalars['Boolean'];
   message: Scalars['String'];
+  token?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -317,7 +318,15 @@ export type LoginMutationVariables = {
 };
 
 export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: Maybe<{ __typename?: 'LoginMutationResponse' } & Pick<LoginMutationResponse, 'code' | 'success' | 'message'>>;
+  login: Maybe<
+    { __typename?: 'LoginMutationResponse' } & Pick<LoginMutationResponse, 'code' | 'success' | 'message' | 'token'>
+  >;
+};
+
+export type MeQueryVariables = {};
+
+export type MeQuery = { __typename?: 'Query' } & {
+  me: Maybe<{ __typename?: 'User' } & Pick<User, 'username' | 'firstName' | 'lastName' | 'email' | 'role' | 'active'>>;
 };
 
 export const LoginDocument = gql`
@@ -326,6 +335,7 @@ export const LoginDocument = gql`
       code
       success
       message
+      token
     }
   }
 `;
@@ -337,3 +347,20 @@ export function useLoginMutation(
   return ReactApolloHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
 }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export const MeDocument = gql`
+  query Me {
+    me {
+      username
+      firstName
+      lastName
+      email
+      role
+      active
+    }
+  }
+`;
+
+export function useMeQuery(baseOptions?: ReactApolloHooks.QueryHookOptions<MeQueryVariables>) {
+  return ReactApolloHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+}
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;

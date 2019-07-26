@@ -1,8 +1,12 @@
 import * as React from 'react';
+import { useApolloClient } from 'react-apollo-hooks';
 import { useLoginMutation } from '../../generated/graphql';
+import UserData from '../UserData/UserData';
+import { AUTH_TOKEN } from '../../constants';
 
 const LoginForm: React.FC = () => {
-  const [login, { loading, data }] = useLoginMutation({
+  const client = useApolloClient();
+  const [login, { loading, data, error }] = useLoginMutation({
     variables: {
       credentials: {
         email: 'admin@admin.com',
@@ -11,12 +15,38 @@ const LoginForm: React.FC = () => {
     },
   });
 
+  const logout = () => {
+    client.clearStore();
+    localStorage.removeItem(AUTH_TOKEN);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error {error.message}</div>;
+  }
+
+  if (!data || !data.login) {
+    return (
+      <button onClick={() => login()} disabled={loading}>
+        Login
+      </button>
+    );
+  }
+
+  if (data.login.token) {
+    localStorage.setItem(AUTH_TOKEN, data.login.token);
+  }
+
   return (
     <div>
       <h2>Login</h2>
-      <p>Message: {data && data.login && data.login.message} </p>
-      <button onClick={() => login()} disabled={loading}>
-        Login
+      <p>Message: {data.login.message} </p>
+      <UserData />
+      <button onClick={() => logout()} disabled={loading}>
+        Logout
       </button>
     </div>
   );

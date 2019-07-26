@@ -6,6 +6,7 @@ const MUTATION_LOGIN = gql`
       code
       success
       message
+      token
     }
   }
 `;

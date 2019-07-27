@@ -1,12 +1,12 @@
 import * as React from 'react';
 import LoginForm from '../components/LoginForm/LoginForm';
+import MainWrapper from '../components/MainWrapper/MainWrapper';
 
 const LoginPage = () => {
   return (
-    <div>
-      <h1>Login</h1>
+    <MainWrapper>
       <LoginForm />
-    </div>
+    </MainWrapper>
   );
 };
 

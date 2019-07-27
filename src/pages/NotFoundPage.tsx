@@ -1,11 +1,15 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import MainWrapper from '../components/MainWrapper/MainWrapper';
 
-const NotFoundPage = ({ location }: any) => {
+const NotFoundPage = ({ location }: RouteComponentProps) => {
+  console.log('location', location);
+
   return (
-    <div>
+    <MainWrapper>
       <h1>404 Page not found</h1>
-      <div>You are coming from {location.pathname}</div>
-    </div>
+      <div>Route {location.pathname} doesn&apos;t exist</div>
+    </MainWrapper>
   );
 };
 

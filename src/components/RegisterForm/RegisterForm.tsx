@@ -93,6 +93,7 @@ const RegisterForm = () => {
           </div>
         </div>
         <div className="flex flex-wrap w-full mb-6">
+          {error && <ErrorAlert title="Server Error" description={error.message} />}
           {data && data.register && !data.register.success && (
             <ErrorAlert title="Error" description={data.register.message} />
           )}

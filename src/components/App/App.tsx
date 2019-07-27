@@ -1,7 +1,6 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
-import HomePage from '../../pages/HomePage';
 import NotFoundPage from '../../pages/NotFoundPage';
 import LoginPage from '../../pages/LoginPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -12,7 +11,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Redirect exact from="/" to="/login" />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
         <ProtectedRoute path="/dashboard" component={DashboardPage} />

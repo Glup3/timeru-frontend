@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { useLoginMutation } from '../../generated/graphql';
-import { saveToken, isAuthenticated } from '../../auth';
+import { saveToken } from '../../auth';
 import InputField from '../InputField/InputField';
 import useInput from '../../hooks/input-hook';
 import SubmitButton from '../Buttons/SubmitButton/SubmitButton';
@@ -26,10 +26,6 @@ const LoginForm: React.FC = () => {
     resetEmail();
     resetPassword();
   };
-
-  if (isAuthenticated()) {
-    return <Redirect to="/dashboard" />;
-  }
 
   if (loading) {
     return <div className="loader"></div>;

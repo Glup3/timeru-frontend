@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { useApolloClient } from 'react-apollo-hooks';
+import { Redirect } from 'react-router-dom';
 import { useLoginMutation } from '../../generated/graphql';
-import UserData from '../UserData/UserData';
-import { AUTH_TOKEN } from '../../constants';
+import { saveToken } from '../../auth';
 
 const LoginForm: React.FC = () => {
-  const client = useApolloClient();
   const [login, { loading, data, error }] = useLoginMutation({
     variables: {
       credentials: {
@@ -14,11 +12,6 @@ const LoginForm: React.FC = () => {
       },
     },
   });
-
-  const logout = () => {
-    client.clearStore();
-    localStorage.removeItem(AUTH_TOKEN);
-  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,19 +34,10 @@ const LoginForm: React.FC = () => {
   }
 
   if (data.login.token) {
-    localStorage.setItem(AUTH_TOKEN, data.login.token);
+    saveToken(data.login.token);
   }
 
-  return (
-    <div>
-      <h2>Login</h2>
-      <p>Message: {data.login.message} </p>
-      <UserData />
-      <button onClick={() => logout()} disabled={loading}>
-        Logout
-      </button>
-    </div>
-  );
+  return <Redirect to="/dashboard" />;
 };
 
 export default LoginForm;

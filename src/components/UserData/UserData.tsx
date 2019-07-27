@@ -16,7 +16,15 @@ const UserData = () => {
 
   return (
     <div>
-      <h2>{me.username}</h2>
+      <h2>
+        {me.role} {me.username}
+      </h2>
+      <span>
+        {me.firstName} {me.lastName}
+      </span>
+      <p>
+        {me.email}: {me.active ? 'activated' : 'deactivated'}
+      </p>
     </div>
   );
 };

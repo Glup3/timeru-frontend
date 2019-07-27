@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import { BrowserRouter } from 'react-router-dom';
 import { AUTH_TOKEN } from './constants';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
@@ -26,7 +27,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <ApolloHooksProvider client={client}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ApolloHooksProvider>
   </ApolloProvider>,
   document.getElementById('root')

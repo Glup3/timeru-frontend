@@ -5,7 +5,9 @@ import MainWrapper from '../components/MainWrapper/MainWrapper';
 const LoginPage = () => {
   return (
     <MainWrapper>
-      <LoginForm />
+      <div className="flex items-center min-h-screen">
+        <LoginForm />
+      </div>
     </MainWrapper>
   );
 };

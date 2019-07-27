@@ -5,7 +5,9 @@ import RegisterForm from '../components/RegisterForm/RegisterForm';
 const RegisterPage = () => {
   return (
     <MainWrapper>
-      <RegisterForm />
+      <div className="flex items-center min-h-screen">
+        <RegisterForm />
+      </div>
     </MainWrapper>
   );
 };

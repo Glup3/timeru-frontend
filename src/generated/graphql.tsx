@@ -80,7 +80,7 @@ export type LoginMutationResponse = MutationResponse & {
 export type Mutation = {
   __typename?: 'Mutation';
   root?: Maybe<Scalars['String']>;
-  register?: Maybe<Array<Maybe<RegisterMutationResponse>>>;
+  register?: Maybe<RegisterMutationResponse>;
   login?: Maybe<LoginMutationResponse>;
   invalidateTokens?: Maybe<Scalars['Boolean']>;
   addCategory?: Maybe<AddCategoryMutationResponse>;
@@ -330,11 +330,7 @@ export type RegisterMutationVariables = {
 
 export type RegisterMutation = { __typename?: 'Mutation' } & {
   register: Maybe<
-    Array<
-      Maybe<
-        { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
-      >
-    >
+    { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
   >;
 };
 

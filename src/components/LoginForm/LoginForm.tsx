@@ -43,9 +43,9 @@ const LoginForm: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-xs">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h1 className="mb-2">Login</h1>
+    <div className="w-full max-w-xs mx-auto">
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+        <h1 className="mb-8">Login</h1>
         <div className="mb-4">
           <InputField label="Email" type="email" bind={bindEmail} />
         </div>
@@ -54,7 +54,10 @@ const LoginForm: React.FC = () => {
         </div>
         <div className="flex items-center justify-between">
           <SubmitButton text="Sign In" />
-          <Link to="/" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          <Link
+            to="/register"
+            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+          >
             Register
           </Link>
         </div>

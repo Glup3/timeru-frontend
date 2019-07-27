@@ -323,6 +323,21 @@ export type LoginMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type RegisterMutationVariables = {
+  credentials: CredentialsInput;
+  personalInfo: PersonalInfoInput;
+};
+
+export type RegisterMutation = { __typename?: 'Mutation' } & {
+  register: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
+      >
+    >
+  >;
+};
+
 export type MeQueryVariables = {};
 
 export type MeQuery = { __typename?: 'Query' } & {
@@ -347,6 +362,23 @@ export function useLoginMutation(
   return ReactApolloHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
 }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export const RegisterDocument = gql`
+  mutation Register($credentials: CredentialsInput!, $personalInfo: PersonalInfoInput!) {
+    register(credentials: $credentials, personalInfo: $personalInfo) {
+      code
+      success
+      message
+    }
+  }
+`;
+export type RegisterMutationFn = ReactApollo.MutationFn<RegisterMutation, RegisterMutationVariables>;
+
+export function useRegisterMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+}
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export const MeDocument = gql`
   query Me {
     me {

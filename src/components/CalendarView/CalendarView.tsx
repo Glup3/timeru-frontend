@@ -1,57 +1,78 @@
 import React from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer, Localizer } from 'react-big-calendar';
 import moment from 'moment';
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+import { useTimeEntriesQuery, TimeEntry } from '../../generated/graphql';
 
 const localizer = momentLocalizer(moment);
 
 const formats = {
-  timeGutterFormat: (date, _, loci) => loci.format(date, 'HH:mm'),
-  dayRangeHeaderFormat: ({ start, end }, _, loci) =>
-    `\\ ${loci.format(start, 'DD MMMM')} - ${loci.format(end, 'DD MMMM YYYY')} /`,
-  eventTimeRangeFormat: ({ start, end }, _, loci) => `${loci.format(start, 'HH:mm')} - ${loci.format(end, 'HH:mm')}`,
+  timeGutterFormat: (date: Date, _: string, loci: Localizer) => loci.format(date, 'HH:mm'),
+  dayRangeHeaderFormat: ({ start, end }, _: string, loci: Localizer) =>
+    `✿ ${loci.format(start, 'DD MMMM')} - ${loci.format(end, 'DD MMMM YYYY')} ✿`,
+  eventTimeRangeFormat: ({ start, end }, _: string, loci: Localizer) =>
+    `${loci.format(start, 'HH:mm')} - ${loci.format(end, 'HH:mm')}`,
 };
 
-const now = new Date();
+const start = moment()
+  .day(0)
+  .second(0)
+  .minute(0)
+  .hour(0);
 
-const events = [
-  {
-    id: 0,
-    title: 'Arbeiten',
-    start: now,
-    end: new Date(now.setHours(now.getHours() + 2)),
-  },
-  {
-    id: 1,
-    title: 'Arbeiten',
-    start: new Date(new Date()),
-    end: new Date(new Date().setHours(new Date().getHours() + 6)),
-  },
-  {
-    id: 2,
-    title: 'what',
-    start: new Date(now.setDate(now.getDate() + 1)),
-    end: new Date(now.setDate(now.getDate() + 1)),
-  },
-];
+const end = moment()
+  .day(6)
+  .second(0)
+  .minute(0)
+  .hour(0);
 
 const CalendarView = () => {
-  const onRangeChange = (props: any) => {
-    console.log('navi', props);
+  const { data, loading, error, refetch } = useTimeEntriesQuery({
+    variables: {
+      start,
+      end,
+    },
+  });
+
+  if (error) {
+    console.log(error);
+    return <div>ERROR: {error.message}</div>;
+  }
+
+  const eventPropGetter = (event: any) => {
+    return {
+      style: {
+        backgroundColor: event.project ? event.project.color : '#404040',
+      },
+    };
   };
 
+  const onRangeChange = (props: any) => {
+    refetch({
+      start: props[0],
+      end: props[6],
+    });
+  };
+
+  console.log('loading', data);
+
   return (
-    <Calendar
-      localizer={localizer}
-      events={events}
-      defaultView="week"
-      views={['week']}
-      formats={formats}
-      onRangeChange={onRangeChange}
-      min={new Date(0, 0, 0, 5, 0)}
-      startAccessor="start"
-      endAccessor="end"
-    />
+    <>
+      {loading && <div className="loader"></div>}
+
+      <Calendar
+        localizer={localizer}
+        events={(data && data.timeEntries) || []}
+        defaultView="week"
+        views={['week']}
+        formats={formats}
+        onRangeChange={onRangeChange}
+        min={new Date(0, 0, 0, 5, 0)}
+        startAccessor={(event: TimeEntry) => new Date(event.start)}
+        endAccessor={(event: TimeEntry) => new Date(event.end)}
+        eventPropGetter={eventPropGetter}
+      />
+    </>
   );
 };
 

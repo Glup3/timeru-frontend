@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import * as ReactApollo from 'react-apollo';
 import * as ReactApolloHooks from 'react-apollo-hooks';
+import * as ReactApollo from 'react-apollo';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -9,6 +9,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Date custom scalar type */
+  Date: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -94,6 +96,8 @@ export type Mutation = {
   updateProject?: Maybe<UpdateProjectMutationResponse>;
   removeProject?: Maybe<RemoveProjectMutationResponse>;
   addUserPermission?: Maybe<AddUserPermissionMutationResponse>;
+  startTimer?: Maybe<StartTimerMutationResponse>;
+  stopTimer?: Maybe<StopTimerMutationResponse>;
 };
 
 export type MutationRegisterArgs = {
@@ -153,6 +157,14 @@ export type MutationAddUserPermissionArgs = {
   userPermissionInput: UserPermissionInput;
 };
 
+export type MutationStartTimerArgs = {
+  timerInput: StartTimerInput;
+};
+
+export type MutationStopTimerArgs = {
+  end: Scalars['Date'];
+};
+
 export type MutationResponse = {
   code: Scalars['String'];
   success: Scalars['Boolean'];
@@ -201,6 +213,7 @@ export type Query = {
   permission?: Maybe<Permission>;
   projects?: Maybe<Array<Maybe<Project>>>;
   project?: Maybe<Project>;
+  timeEntries?: Maybe<Array<Maybe<TimeEntry>>>;
 };
 
 export type QueryCategoryArgs = {
@@ -215,6 +228,11 @@ export type QueryPermissionArgs = {
 export type QueryProjectArgs = {
   id?: Maybe<Scalars['ID']>;
   codename?: Maybe<Scalars['String']>;
+};
+
+export type QueryTimeEntriesArgs = {
+  start: Scalars['Date'];
+  end: Scalars['Date'];
 };
 
 export type RegisterMutationResponse = MutationResponse & {
@@ -246,6 +264,45 @@ export type RemoveProjectMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
   message: Scalars['String'];
   project?: Maybe<Project>;
+};
+
+export type StartTimerInput = {
+  start?: Maybe<Scalars['Date']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  valuable?: Maybe<Scalars['Boolean']>;
+  projectId?: Maybe<Scalars['ID']>;
+  categoryId?: Maybe<Scalars['ID']>;
+};
+
+export type StartTimerMutationResponse = MutationResponse & {
+  __typename?: 'StartTimerMutationResponse';
+  code: Scalars['String'];
+  success: Scalars['Boolean'];
+  message: Scalars['String'];
+  timeEntry?: Maybe<TimeEntry>;
+};
+
+export type StopTimerMutationResponse = MutationResponse & {
+  __typename?: 'StopTimerMutationResponse';
+  code: Scalars['String'];
+  success: Scalars['Boolean'];
+  message: Scalars['String'];
+  timeEntry?: Maybe<TimeEntry>;
+};
+
+export type TimeEntry = {
+  __typename?: 'TimeEntry';
+  id?: Maybe<Scalars['ID']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['Date']>;
+  end?: Maybe<Scalars['Date']>;
+  duration?: Maybe<Scalars['Int']>;
+  valuable?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<User>;
+  project?: Maybe<Project>;
+  category?: Maybe<Category>;
 };
 
 export type UpdateCategoryMutationResponse = MutationResponse & {
@@ -313,6 +370,27 @@ export type UserPermissionInput = {
   permissionId?: Maybe<Scalars['ID']>;
   permissionTitle?: Maybe<Scalars['String']>;
 };
+export type TimeEntriesQueryVariables = {
+  start: Scalars['Date'];
+  end: Scalars['Date'];
+};
+
+export type TimeEntriesQuery = { __typename?: 'Query' } & {
+  timeEntries: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'TimeEntry' } & Pick<
+          TimeEntry,
+          'id' | 'title' | 'description' | 'start' | 'end' | 'valuable'
+        > & {
+            project: Maybe<{ __typename?: 'Project' } & Pick<Project, 'color' | 'codename'>>;
+            category: Maybe<{ __typename?: 'Category' } & Pick<Category, 'title'>>;
+          }
+      >
+    >
+  >;
+};
+
 export type LoginMutationVariables = {
   credentials: CredentialsInput;
 };
@@ -340,6 +418,30 @@ export type MeQuery = { __typename?: 'Query' } & {
   me: Maybe<{ __typename?: 'User' } & Pick<User, 'username' | 'firstName' | 'lastName' | 'email' | 'role' | 'active'>>;
 };
 
+export const TimeEntriesDocument = gql`
+  query TimeEntries($start: Date!, $end: Date!) {
+    timeEntries(start: $start, end: $end) {
+      id
+      title
+      description
+      start
+      end
+      valuable
+      project {
+        color
+        codename
+      }
+      category {
+        title
+      }
+    }
+  }
+`;
+
+export function useTimeEntriesQuery(baseOptions?: ReactApolloHooks.QueryHookOptions<TimeEntriesQueryVariables>) {
+  return ReactApolloHooks.useQuery<TimeEntriesQuery, TimeEntriesQueryVariables>(TimeEntriesDocument, baseOptions);
+}
+export type TimeEntriesQueryHookResult = ReturnType<typeof useTimeEntriesQuery>;
 export const LoginDocument = gql`
   mutation Login($credentials: CredentialsInput!) {
     login(credentials: $credentials) {

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import * as ReactApolloHooks from 'react-apollo-hooks';
 import * as ReactApollo from 'react-apollo';
+import * as ReactApolloHooks from 'react-apollo-hooks';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -214,6 +214,7 @@ export type Query = {
   projects?: Maybe<Array<Maybe<Project>>>;
   project?: Maybe<Project>;
   timeEntries?: Maybe<Array<Maybe<TimeEntry>>>;
+  isTimerRunning?: Maybe<Scalars['Boolean']>;
 };
 
 export type QueryCategoryArgs = {
@@ -370,6 +371,59 @@ export type UserPermissionInput = {
   permissionId?: Maybe<Scalars['ID']>;
   permissionTitle?: Maybe<Scalars['String']>;
 };
+export type LoginMutationVariables = {
+  credentials: CredentialsInput;
+};
+
+export type LoginMutation = { __typename?: 'Mutation' } & {
+  login: Maybe<
+    { __typename?: 'LoginMutationResponse' } & Pick<LoginMutationResponse, 'code' | 'success' | 'message' | 'token'>
+  >;
+};
+
+export type StartTimerMutationVariables = {
+  timerInput: StartTimerInput;
+};
+
+export type StartTimerMutation = { __typename?: 'Mutation' } & {
+  startTimer: Maybe<
+    { __typename?: 'StartTimerMutationResponse' } & Pick<StartTimerMutationResponse, 'code' | 'success' | 'message'> & {
+        timeEntry: Maybe<{ __typename?: 'TimeEntry' } & Pick<TimeEntry, 'title' | 'start'>>;
+      }
+  >;
+};
+
+export type RegisterMutationVariables = {
+  credentials: CredentialsInput;
+  personalInfo: PersonalInfoInput;
+};
+
+export type RegisterMutation = { __typename?: 'Mutation' } & {
+  register: Maybe<
+    { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
+  >;
+};
+
+export type StopTimerMutationVariables = {
+  end: Scalars['Date'];
+};
+
+export type StopTimerMutation = { __typename?: 'Mutation' } & {
+  stopTimer: Maybe<
+    { __typename?: 'StopTimerMutationResponse' } & Pick<StopTimerMutationResponse, 'code' | 'success' | 'message'>
+  >;
+};
+
+export type IsTimerRunningQueryVariables = {};
+
+export type IsTimerRunningQuery = { __typename?: 'Query' } & Pick<Query, 'isTimerRunning'>;
+
+export type MeQueryVariables = {};
+
+export type MeQuery = { __typename?: 'Query' } & {
+  me: Maybe<{ __typename?: 'User' } & Pick<User, 'username' | 'firstName' | 'lastName' | 'email' | 'role' | 'active'>>;
+};
+
 export type TimeEntriesQueryVariables = {
   start: Scalars['Date'];
   end: Scalars['Date'];
@@ -391,33 +445,109 @@ export type TimeEntriesQuery = { __typename?: 'Query' } & {
   >;
 };
 
-export type LoginMutationVariables = {
-  credentials: CredentialsInput;
-};
+export const LoginDocument = gql`
+  mutation Login($credentials: CredentialsInput!) {
+    login(credentials: $credentials) {
+      code
+      success
+      message
+      token
+    }
+  }
+`;
+export type LoginMutationFn = ReactApollo.MutationFn<LoginMutation, LoginMutationVariables>;
 
-export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: Maybe<
-    { __typename?: 'LoginMutationResponse' } & Pick<LoginMutationResponse, 'code' | 'success' | 'message' | 'token'>
-  >;
-};
+export function useLoginMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+}
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export const StartTimerDocument = gql`
+  mutation StartTimer($timerInput: StartTimerInput!) {
+    startTimer(timerInput: $timerInput) {
+      code
+      success
+      message
+      timeEntry {
+        title
+        start
+      }
+    }
+  }
+`;
+export type StartTimerMutationFn = ReactApollo.MutationFn<StartTimerMutation, StartTimerMutationVariables>;
 
-export type RegisterMutationVariables = {
-  credentials: CredentialsInput;
-  personalInfo: PersonalInfoInput;
-};
+export function useStartTimerMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<StartTimerMutation, StartTimerMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<StartTimerMutation, StartTimerMutationVariables>(StartTimerDocument, baseOptions);
+}
+export type StartTimerMutationHookResult = ReturnType<typeof useStartTimerMutation>;
+export const RegisterDocument = gql`
+  mutation Register($credentials: CredentialsInput!, $personalInfo: PersonalInfoInput!) {
+    register(credentials: $credentials, personalInfo: $personalInfo) {
+      code
+      success
+      message
+    }
+  }
+`;
+export type RegisterMutationFn = ReactApollo.MutationFn<RegisterMutation, RegisterMutationVariables>;
 
-export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: Maybe<
-    { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
-  >;
-};
+export function useRegisterMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+}
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export const StopTimerDocument = gql`
+  mutation StopTimer($end: Date!) {
+    stopTimer(end: $end) {
+      code
+      success
+      message
+    }
+  }
+`;
+export type StopTimerMutationFn = ReactApollo.MutationFn<StopTimerMutation, StopTimerMutationVariables>;
 
-export type MeQueryVariables = {};
+export function useStopTimerMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<StopTimerMutation, StopTimerMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<StopTimerMutation, StopTimerMutationVariables>(StopTimerDocument, baseOptions);
+}
+export type StopTimerMutationHookResult = ReturnType<typeof useStopTimerMutation>;
+export const IsTimerRunningDocument = gql`
+  query IsTimerRunning {
+    isTimerRunning
+  }
+`;
 
-export type MeQuery = { __typename?: 'Query' } & {
-  me: Maybe<{ __typename?: 'User' } & Pick<User, 'username' | 'firstName' | 'lastName' | 'email' | 'role' | 'active'>>;
-};
+export function useIsTimerRunningQuery(baseOptions?: ReactApolloHooks.QueryHookOptions<IsTimerRunningQueryVariables>) {
+  return ReactApolloHooks.useQuery<IsTimerRunningQuery, IsTimerRunningQueryVariables>(
+    IsTimerRunningDocument,
+    baseOptions
+  );
+}
+export type IsTimerRunningQueryHookResult = ReturnType<typeof useIsTimerRunningQuery>;
+export const MeDocument = gql`
+  query Me {
+    me {
+      username
+      firstName
+      lastName
+      email
+      role
+      active
+    }
+  }
+`;
 
+export function useMeQuery(baseOptions?: ReactApolloHooks.QueryHookOptions<MeQueryVariables>) {
+  return ReactApolloHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+}
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export const TimeEntriesDocument = gql`
   query TimeEntries($start: Date!, $end: Date!) {
     timeEntries(start: $start, end: $end) {
@@ -442,55 +572,3 @@ export function useTimeEntriesQuery(baseOptions?: ReactApolloHooks.QueryHookOpti
   return ReactApolloHooks.useQuery<TimeEntriesQuery, TimeEntriesQueryVariables>(TimeEntriesDocument, baseOptions);
 }
 export type TimeEntriesQueryHookResult = ReturnType<typeof useTimeEntriesQuery>;
-export const LoginDocument = gql`
-  mutation Login($credentials: CredentialsInput!) {
-    login(credentials: $credentials) {
-      code
-      success
-      message
-      token
-    }
-  }
-`;
-export type LoginMutationFn = ReactApollo.MutationFn<LoginMutation, LoginMutationVariables>;
-
-export function useLoginMutation(
-  baseOptions?: ReactApolloHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>
-) {
-  return ReactApolloHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
-}
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export const RegisterDocument = gql`
-  mutation Register($credentials: CredentialsInput!, $personalInfo: PersonalInfoInput!) {
-    register(credentials: $credentials, personalInfo: $personalInfo) {
-      code
-      success
-      message
-    }
-  }
-`;
-export type RegisterMutationFn = ReactApollo.MutationFn<RegisterMutation, RegisterMutationVariables>;
-
-export function useRegisterMutation(
-  baseOptions?: ReactApolloHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>
-) {
-  return ReactApolloHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
-}
-export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
-export const MeDocument = gql`
-  query Me {
-    me {
-      username
-      firstName
-      lastName
-      email
-      role
-      active
-    }
-  }
-`;
-
-export function useMeQuery(baseOptions?: ReactApolloHooks.QueryHookOptions<MeQueryVariables>) {
-  return ReactApolloHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
-}
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;

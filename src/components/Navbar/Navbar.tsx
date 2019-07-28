@@ -1,6 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import PlayPause from '../PlayPause/PlayPause';
 
 const Navbar = () => {
   return (
@@ -11,7 +10,7 @@ const Navbar = () => {
             <span>DropDownMenu</span>
             <input className="flex-1 ml-4 p-2 outline-none border-gray-300 border-2 rounded" placeholder="Title" />
             <p className="mx-5">14:27</p>
-            <FontAwesomeIcon icon={faPlay} size="lg" className="text-blue-300 hover:text-blue-800" />
+            <PlayPause />
           </div>
         </div>
       </div>

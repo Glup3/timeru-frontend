@@ -37,7 +37,7 @@ const LoginForm: React.FC = () => {
 
   if (data && data.login && data.login.token) {
     saveToken(data.login.token);
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/timer" />;
   }
 
   return (

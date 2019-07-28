@@ -7,7 +7,7 @@ import AnimeBackground from '../components/AnimeBackground/AnimeBackground';
 
 const RegisterPage = () => {
   if (isAuthenticated()) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/timer" />;
   }
 
   return (

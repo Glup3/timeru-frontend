@@ -6,6 +6,7 @@ import LoginPage from '../../pages/LoginPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import DashboardPage from '../../pages/DashboardPage';
 import RegisterPage from '../../pages/RegisterPage';
+import TimerPage from '../../pages/TimerPage';
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
         <ProtectedRoute path="/dashboard" component={DashboardPage} />
+        <ProtectedRoute path="/timer" component={TimerPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>

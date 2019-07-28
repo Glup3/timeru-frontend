@@ -32,6 +32,7 @@ const CalendarView = () => {
       start,
       end,
     },
+    fetchPolicy: 'network-only',
   });
 
   if (error) {

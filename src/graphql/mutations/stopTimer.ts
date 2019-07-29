@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const MUTATION_STOP_TIMER = gql`
-  mutation StopTimer($end: Date!) {
-    stopTimer(end: $end) {
+  mutation StopTimer {
+    stopTimer {
       code
       success
       message

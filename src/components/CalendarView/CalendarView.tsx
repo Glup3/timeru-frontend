@@ -68,9 +68,9 @@ const CalendarView = () => {
         views={['week']}
         formats={formats}
         onRangeChange={onRangeChange}
-        min={new Date(0, 0, 0, 5, 0)}
+        min={new Date(0, 0, 0, 0, 0)}
         startAccessor={(event: TimeEntry) => new Date(event.start)}
-        endAccessor={(event: TimeEntry) => new Date(event.end)}
+        endAccessor={(event: TimeEntry) => (event.end != null ? new Date(event.end) : new Date())}
         eventPropGetter={eventPropGetter}
       />
     </>

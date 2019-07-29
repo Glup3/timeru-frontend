@@ -6,19 +6,26 @@ import { useStartTimerMutation, useStopTimerMutation, useIsTimerRunningQuery } f
 const PlayPause = () => {
   const [startTimer, { loading: startLoading }] = useStartTimerMutation({
     variables: {
-      timerInput: {
-        start: new Date(),
-      },
+      timerInput: {},
+    },
+    update: cache => {
+      cache.writeData({
+        data: {
+          isTimerRunning: true,
+        },
+      });
     },
   });
   const [stopTimer, { loading: stopLoading }] = useStopTimerMutation({
-    variables: {
-      end: new Date(),
+    update: cache => {
+      cache.writeData({
+        data: {
+          isTimerRunning: false,
+        },
+      });
     },
   });
-  const { data, error } = useIsTimerRunningQuery({
-    pollInterval: 500,
-  });
+  const { data, error } = useIsTimerRunningQuery({});
 
   if (error) {
     console.log(error);

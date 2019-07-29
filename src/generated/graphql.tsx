@@ -161,10 +161,6 @@ export type MutationStartTimerArgs = {
   timerInput: StartTimerInput;
 };
 
-export type MutationStopTimerArgs = {
-  end: Scalars['Date'];
-};
-
 export type MutationResponse = {
   code: Scalars['String'];
   success: Scalars['Boolean'];
@@ -268,7 +264,6 @@ export type RemoveProjectMutationResponse = MutationResponse & {
 };
 
 export type StartTimerInput = {
-  start?: Maybe<Scalars['Date']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   valuable?: Maybe<Scalars['Boolean']>;
@@ -381,6 +376,17 @@ export type LoginMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type RegisterMutationVariables = {
+  credentials: CredentialsInput;
+  personalInfo: PersonalInfoInput;
+};
+
+export type RegisterMutation = { __typename?: 'Mutation' } & {
+  register: Maybe<
+    { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
+  >;
+};
+
 export type StartTimerMutationVariables = {
   timerInput: StartTimerInput;
 };
@@ -393,20 +399,7 @@ export type StartTimerMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
-export type RegisterMutationVariables = {
-  credentials: CredentialsInput;
-  personalInfo: PersonalInfoInput;
-};
-
-export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: Maybe<
-    { __typename?: 'RegisterMutationResponse' } & Pick<RegisterMutationResponse, 'code' | 'success' | 'message'>
-  >;
-};
-
-export type StopTimerMutationVariables = {
-  end: Scalars['Date'];
-};
+export type StopTimerMutationVariables = {};
 
 export type StopTimerMutation = { __typename?: 'Mutation' } & {
   stopTimer: Maybe<
@@ -463,6 +456,23 @@ export function useLoginMutation(
   return ReactApolloHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
 }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export const RegisterDocument = gql`
+  mutation Register($credentials: CredentialsInput!, $personalInfo: PersonalInfoInput!) {
+    register(credentials: $credentials, personalInfo: $personalInfo) {
+      code
+      success
+      message
+    }
+  }
+`;
+export type RegisterMutationFn = ReactApollo.MutationFn<RegisterMutation, RegisterMutationVariables>;
+
+export function useRegisterMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>
+) {
+  return ReactApolloHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+}
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export const StartTimerDocument = gql`
   mutation StartTimer($timerInput: StartTimerInput!) {
     startTimer(timerInput: $timerInput) {
@@ -484,26 +494,9 @@ export function useStartTimerMutation(
   return ReactApolloHooks.useMutation<StartTimerMutation, StartTimerMutationVariables>(StartTimerDocument, baseOptions);
 }
 export type StartTimerMutationHookResult = ReturnType<typeof useStartTimerMutation>;
-export const RegisterDocument = gql`
-  mutation Register($credentials: CredentialsInput!, $personalInfo: PersonalInfoInput!) {
-    register(credentials: $credentials, personalInfo: $personalInfo) {
-      code
-      success
-      message
-    }
-  }
-`;
-export type RegisterMutationFn = ReactApollo.MutationFn<RegisterMutation, RegisterMutationVariables>;
-
-export function useRegisterMutation(
-  baseOptions?: ReactApolloHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>
-) {
-  return ReactApolloHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
-}
-export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export const StopTimerDocument = gql`
-  mutation StopTimer($end: Date!) {
-    stopTimer(end: $end) {
+  mutation StopTimer {
+    stopTimer {
       code
       success
       message

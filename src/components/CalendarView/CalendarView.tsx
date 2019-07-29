@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Calendar, momentLocalizer, Localizer } from 'react-big-calendar';
 import moment from 'moment';
+import Modal from 'react-responsive-modal';
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+import TimeEntryContext from '../../context';
 import { useTimeEntriesQuery, TimeEntry } from '../../generated/graphql';
+import EntryDetails from '../EntryDetails/EntryDetails';
 
 const localizer = momentLocalizer(moment);
 
@@ -27,6 +30,8 @@ const end = moment()
   .hour(0);
 
 const CalendarView = () => {
+  const [open, setOpen] = useState(false);
+  const timeEntryContext = useContext(TimeEntryContext);
   const { data, loading, error, refetch } = useTimeEntriesQuery({
     variables: {
       start,
@@ -55,11 +60,20 @@ const CalendarView = () => {
     });
   };
 
+  const onClickTimeEntry = (event: TimeEntry) => {
+    timeEntryContext.selectedEntry = event;
+    setOpen(!open);
+  };
+
   console.log('loading', data);
 
   return (
     <>
       {loading && <div className="loader"></div>}
+
+      <Modal open={open} onClose={() => setOpen(false)} center showCloseIcon={false} focusTrapped={false}>
+        <EntryDetails />
+      </Modal>
 
       <Calendar
         localizer={localizer}
@@ -72,6 +86,7 @@ const CalendarView = () => {
         startAccessor={(event: TimeEntry) => new Date(event.start)}
         endAccessor={(event: TimeEntry) => (event.end != null ? new Date(event.end) : new Date())}
         eventPropGetter={eventPropGetter}
+        onSelectEvent={onClickTimeEntry}
       />
     </>
   );

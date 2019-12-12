@@ -1,41 +1,21 @@
 import React, { useState, useContext } from 'react';
-import { Calendar, momentLocalizer, Localizer } from 'react-big-calendar';
-import moment from 'moment';
+import { Calendar } from 'react-big-calendar';
 import Modal from 'react-responsive-modal';
-import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
-import TimeEntryContext from '../../context';
-import { useTimeEntriesQuery, TimeEntry } from '../../generated/graphql';
+
 import EntryDetails from '../EntryDetails/EntryDetails';
+import { useTimeEntriesQuery, TimeEntry } from '../../generated/graphql';
+import { localizer, startDay, endDay, formats } from './calendarHelper';
+import TimeEntryContext from '../../context';
 
-const localizer = momentLocalizer(moment);
-
-const formats = {
-  timeGutterFormat: (date: Date, _: string, loci: Localizer) => loci.format(date, 'HH:mm'),
-  dayRangeHeaderFormat: ({ start, end }, _: string, loci: Localizer) =>
-    `✿ ${loci.format(start, 'DD MMMM')} - ${loci.format(end, 'DD MMMM YYYY')} ✿`,
-  eventTimeRangeFormat: ({ start, end }, _: string, loci: Localizer) =>
-    `${loci.format(start, 'HH:mm')} - ${loci.format(end, 'HH:mm')}`,
-};
-
-const start = moment()
-  .day(0)
-  .second(0)
-  .minute(0)
-  .hour(0);
-
-const end = moment()
-  .day(6)
-  .second(0)
-  .minute(0)
-  .hour(0);
+import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 
 const CalendarView = () => {
   const [open, setOpen] = useState(false);
   const timeEntryContext = useContext(TimeEntryContext);
   const { data, loading, error, refetch } = useTimeEntriesQuery({
     variables: {
-      start,
-      end,
+      start: startDay,
+      end: endDay,
     },
     fetchPolicy: 'network-only',
   });
@@ -48,15 +28,15 @@ const CalendarView = () => {
   const eventPropGetter = (event: any) => {
     return {
       style: {
-        backgroundColor: event.project ? event.project.color : '#404040',
+        backgroundColor: event.project ? event.project.color : '#208020',
       },
     };
   };
 
-  const onRangeChange = (props: any) => {
+  const onRangeChange = (dates: any) => {
     refetch({
-      start: props[0],
-      end: props[6],
+      start: dates[0],
+      end: dates[6],
     });
   };
 

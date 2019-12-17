@@ -8,6 +8,7 @@ import { localizer, startDay, endDay, formats } from './calendarHelper';
 import TimeEntryContext from '../../context';
 
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+import '../../css/calendar.css';
 
 const CalendarView = () => {
   const [open, setOpen] = useState(false);
@@ -28,7 +29,7 @@ const CalendarView = () => {
   const eventPropGetter = (event: any) => {
     return {
       style: {
-        backgroundColor: event.project ? event.project.color : '#208020',
+        backgroundColor: event.project ? event.project.color : '#585858',
       },
     };
   };
@@ -67,6 +68,8 @@ const CalendarView = () => {
         endAccessor={(event: TimeEntry) => (event.end != null ? new Date(event.end) : new Date())}
         eventPropGetter={eventPropGetter}
         onSelectEvent={onClickTimeEntry}
+        step={15}
+        timeslots={4}
       />
     </>
   );

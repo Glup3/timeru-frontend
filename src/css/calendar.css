@@ -1,0 +1,8 @@
+.rbc-time-slot {
+  min-height: 30px;
+}
+
+.rbc-current-time-indicator {
+  height: 1px;
+  background-color: #41a7ff;
+}

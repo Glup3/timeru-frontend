@@ -1,30 +1,9 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faStopCircle } from '@fortawesome/free-solid-svg-icons';
-import { useStartTimerMutation, useStopTimerMutation, useIsTimerRunningQuery } from '../../generated/graphql';
+import { useIsTimerRunningQuery } from '../../generated/graphql';
+import PlayButton from './PlayButton';
+import PauseButton from './PauseButton';
 
 const PlayPause = () => {
-  const [startTimer, { loading: startLoading }] = useStartTimerMutation({
-    variables: {
-      timerInput: {},
-    },
-    update: cache => {
-      cache.writeData({
-        data: {
-          isTimerRunning: true,
-        },
-      });
-    },
-  });
-  const [stopTimer, { loading: stopLoading }] = useStopTimerMutation({
-    update: cache => {
-      cache.writeData({
-        data: {
-          isTimerRunning: false,
-        },
-      });
-    },
-  });
   const { data, error } = useIsTimerRunningQuery({});
 
   if (error) {
@@ -32,26 +11,10 @@ const PlayPause = () => {
   }
 
   if (data && data.isTimerRunning) {
-    return (
-      <button
-        onClick={() => stopTimer()}
-        disabled={stopLoading}
-        className={`${stopLoading ? 'cursor-not-allowed' : ''}`}
-      >
-        <FontAwesomeIcon icon={faStopCircle} size="lg" className="text-blue-300 hover:text-blue-800" />
-      </button>
-    );
+    return <PauseButton />;
   }
 
-  return (
-    <button
-      onClick={() => startTimer()}
-      disabled={startLoading}
-      className={`${startLoading ? 'cursor-not-allowed' : ''}`}
-    >
-      <FontAwesomeIcon icon={faPlay} size="lg" className="text-blue-300 hover:text-blue-800" />
-    </button>
-  );
+  return <PlayButton />;
 };
 
 export default PlayPause;

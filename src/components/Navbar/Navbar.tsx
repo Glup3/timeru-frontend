@@ -4,6 +4,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import PlayPause from '../PlayPause/PlayPause';
 import { removeToken } from '../../auth';
+import TitleInputField from '../TitleInputField/TitleInputField';
 
 const Navbar = () => {
   return (
@@ -14,7 +15,7 @@ const Navbar = () => {
             <Link to="/login" onClick={() => removeToken()}>
               <FontAwesomeIcon size="lg" icon={faSignOutAlt} />
             </Link>
-            <input className="flex-1 ml-4 p-2 outline-none border-gray-300 border-2 rounded" placeholder="Title" />
+            <TitleInputField />
             <p className="mx-5">14:27</p>
             <PlayPause />
           </div>

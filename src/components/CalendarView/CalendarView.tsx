@@ -46,8 +46,6 @@ const CalendarView = () => {
     setOpen(!open);
   };
 
-  console.log('loading', data);
-
   return (
     <>
       {loading && <div className="loader"></div>}

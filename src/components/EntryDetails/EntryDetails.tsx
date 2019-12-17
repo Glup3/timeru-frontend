@@ -3,7 +3,6 @@ import TimeEntryContext from '../../context';
 
 const EntryDetails = () => {
   const { selectedEntry } = useContext(TimeEntryContext);
-  console.log(selectedEntry);
 
   if (!selectedEntry) {
     return <div>OOF</div>;
